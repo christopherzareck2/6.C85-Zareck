@@ -1,19 +1,313 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christopher Zareck: Personal site and portfolio</title>
-</head>
-<body>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <h1>Christopher Zareck</h1>
+  <title>Vis & Society Assignment 2</title>
+  <link rel="stylesheet" href="https://vis-society.github.io/assignments/report.css" />
+
+  <style>
+    figure {
+      max-width: 1080px;
+      margin: 2rem auto;
+    }
+
+    figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    figcaption {
+      max-width: 1080px;
+      margin: 0.75rem auto 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    /* Optional: tighten spacing between question + motivation blocks */
+    ol > li { margin-bottom: 1rem; }
+    ol > li p { margin: 0.5rem 0 0; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>
+      <small>Assignment 2</small>
+      Exploratory Data Analysis
+    </h1>
 
     <p>
-        I am an astronautical engineer and MIT AeroAstro graduate student interested in
-        human spaceflight, mission design, and space systems. This site will serve as a
-        personal portfolio for my academic work for 6.C85.
+      <strong>Christopher Zareck</strong> <em>czareck2@mit.edu</em>
+    </p>
+  </header>
+
+  <main>
+    <section>
+    <h2>Subtheme: Corporate Landlords and Evictions</h2>
+
+    <p>
+        This analysis examines how ownership structure shapes Boston’s housing market, with a
+        particular focus on the distinction between owner-occupied housing, absentee ownership,
+        and corporate landlords. Prior research suggests that corporate and non-local landlords
+        are more likely to file evictions, while owner-occupants or locally based landlords may
+        have greater flexibility in responding to missed or late rent payments. These differences
+        are frequently discussed in relation to housing stability, displacement, and eviction risk.
     </p>
 
+    <p>
+        Background readings for this subtheme, including
+        <em>In 83 Million Eviction Records, a Sweeping and Intimate New Look at Housing in America</em>
+        (New York Times) and the Homes for All MA report on eviction filings during COVID, frame
+        eviction not simply as a legal event, but as an outcome shaped by market structure,
+        ownership incentives, and broader socioeconomic conditions. Rather than focusing on
+        individual eviction cases, this work emphasizes patterns at scale and asks whether
+        certain communities are systematically more exposed to eviction risk.
+    </p>
+
+    <p>
+        Using longitudinal, neighborhood-level data on corporate ownership rates and owner-occupancy
+        from 2004 to 2024, this exploratory analysis investigates how ownership patterns in Boston
+        have changed over time, where those changes are most pronounced, and how corporate ownership
+        and owner-occupancy relate to neighborhood demographics. The goal is not to make causal
+        claims about eviction behavior, but to assess whether the ownership patterns described in
+        prior research are visible in Boston’s housing data and to surface spatial and temporal
+        trends that merit deeper investigation.
+    </p>
+    </section>
+
+    <section>
+      <h2>Overall Analysis Questions</h2>
+
+      <ol>
+        <li>
+          <strong>How have corporate ownership rates and owner-occupancy rates changed in Boston neighborhoods from 2004 to 2024?</strong>
+          <p>
+            <em>Motivation:</em> Prior work on evictions and housing stability often points to ownership
+            structure as an important factor, particularly the distinction between owner-occupied housing
+            and properties held by corporate or absentee landlords. Before evaluating any downstream
+            outcomes such as eviction risk, it is necessary to understand how ownership patterns themselves
+            have evolved over time. This question is motivated by claims in both the New York Times eviction
+            analysis and the Homes for All MA report that corporate and absentee ownership has increased in
+            recent decades, potentially changing the structure of the rental market.
+          </p>
+        </li>
+
+        <li>
+          <strong>Which neighborhoods experienced the largest increases in corporate ownership or decreases in owner-occupancy, and what do the extremes look like in 2024?</strong>
+          <p>
+            <em>Motivation:</em> Aggregate citywide trends can obscure meaningful variation at the neighborhood
+            level. Prior research emphasizes that the impacts of housing market changes are not evenly
+            distributed across space, and that some communities may be more exposed to investor activity
+            than others. Identifying neighborhoods at the extremes of these trends helps connect the data
+            to ongoing policy discussions about where housing pressures are most concentrated and where
+            interventions may be most relevant.
+          </p>
+        </li>
+
+        <li>
+          <strong>Are neighborhoods with higher corporate ownership also characterized by lower owner-occupancy, and do these patterns differ across neighborhood demographics?</strong>
+          <p>
+            <em>Motivation:</em> The background readings suggest a relationship between corporate or absentee
+            ownership and housing instability, with particular attention to racial and socioeconomic
+            disparities in eviction filings. While this dataset does not include eviction outcomes directly,
+            examining the relationship between corporate ownership, owner-occupancy, and neighborhood
+            demographic composition provides a way to assess whether the structural patterns discussed in
+            prior work appear in Boston’s housing data. This question serves as a pattern-check rather than
+            a causal test, helping to evaluate whether ownership structure and demographics are spatially
+            correlated.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Data Notes, Assumptions &amp; Transformations</h2>
+
+      <h3>Dataset structure</h3>
+      <ul>
+        <li><strong>Unit of analysis:</strong> Each row represents a <em>Boston neighborhood</em> in a given <em>year</em> (2004–2024).</li>
+        <li><strong>Key measures:</strong> <code>corp_own_rate</code> (corporate ownership rate) and <code>own_occ_rate</code> (owner-occupancy rate), reported as proportions (0–1).</li>
+        <li><strong>Demographic context:</strong> Neighborhood-level counts by race/ethnicity (e.g., <code>white_all</code>, <code>black_all</code>, <code>hisp_all</code>, <code>aapi_all</code>) and population totals (e.g., <code>tot_pop_all</code>).</li>
+      </ul>
+
+      <h3>Quality checks</h3>
+      <ul>
+        <li><strong>Range checks:</strong> Rate variables were checked to ensure they fall within [0, 1].</li>
+        <li><strong>Missing values:</strong> Rows with missing values in required fields were excluded only for figures that required them (e.g., the 2024 scatter requires <code>corp_own_rate</code>, <code>own_occ_rate</code>, and demographic context).</li>
+        <li><strong>Population denominator:</strong> Demographic shares were computed using <code>tot_pop_all</code>. If <code>tot_pop_all</code> equals zero, shares are treated as missing to avoid division-by-zero artifacts.</li>
+      </ul>
+
+      <h3>Interpretation assumptions</h3>
+      <ul>
+        <li><strong>Owner-occupancy as a proxy:</strong> Lower <code>own_occ_rate</code> is treated as a rough proxy for higher non-owner occupancy and potentially more absentee ownership, but it does not directly identify landlord location or management practices.</li>
+        <li><strong>Corporate ownership:</strong> <code>corp_own_rate</code> is interpreted as the share of properties held by corporate entities; this may include small LLCs or corporate forms used by local owners.</li>
+        <li><strong>Demographic correlations are not causal:</strong> Demographics are used to provide context for where ownership patterns cluster and are not interpreted as causes of ownership change or eviction risk.</li>
+      </ul>
+
+      <h3>Transformations and analytical choices</h3>
+      <ul>
+        <li><strong>Demographic shares:</strong> Created derived variables such as <code>pct_nonwhite = 1 - white_all / tot_pop_all</code>.</li>
+        <li><strong>Weighted averages over time:</strong> Computed occupied-unit–weighted averages by year using <code>occ_unit</code>.</li>
+        <li><strong>Change over time:</strong> Computed neighborhood-level deltas from 2004 to 2024 (e.g., <code>corp_own_rate_2024 − corp_own_rate_2004</code>).</li>
+        <li><strong>Association measures:</strong> Used Pearson correlation to summarize the linear relationship between corporate ownership and owner-occupancy across neighborhoods each year.</li>
+        <li><strong>Selective labeling rule:</strong> Labels in the 2024 scatter are applied using predefined rules (top corporate ownership, lowest owner-occupancy, highest non-white share) rather than hand-picked examples.</li>
+      </ul>
+
+      <p>
+        <strong>Scope note:</strong> This dataset does not include eviction filings directly, so this analysis focuses on ownership structure patterns that prior work links to eviction risk, rather than measuring eviction outcomes themselves.
+      </p>
+    </section>
+
+    <section>
+      <h2>Discoveries &amp; Insights</h2>
+
+      <figure>
+        <img src="fig1_distributions.png" alt="Distributions of corporate ownership and owner-occupancy in 2004 vs 2024" />
+        <figcaption>
+          This figure compares how neighborhood-level distributions of corporate ownership and owner-occupancy shifted between 2004 and 2024. Corporate ownership exhibits a pronounced rightward shift, indicating that increases occurred broadly across Boston neighborhoods rather than being driven by a small number of extreme cases. Owner-occupancy shifts in the opposite direction, but more modestly, suggesting a gradual citywide decline rather than a uniform collapse. Together, these distributional changes motivate closer examination of where these shifts are most concentrated and whether they are evenly shared across neighborhoods.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="fig2_trends.png" alt="Weighted average trends for owner-occupancy and corporate ownership over time" />
+        <figcaption>
+          These trends show occupied-unit–weighted average ownership rates over time, meaning neighborhoods contribute in proportion to the number of housing units actually lived in rather than being treated equally regardless of size. Under this weighting, corporate ownership increases steadily across the full period and accelerates in the later years, while owner-occupancy declines overall with only minor short-term fluctuations. The persistence and smoothness of these opposing trends suggest a sustained shift in Boston’s housing ownership structure rather than temporary volatility. This motivates examining which neighborhoods are driving these changes and whether they are concentrated in particular parts of the city.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="fig3_top_changes.png" alt="Largest increases in corporate ownership and largest decreases in owner-occupancy from 2004 to 2024" />
+        <figcaption>
+          This comparison highlights neighborhoods with the largest increases in corporate ownership and the largest declines in owner-occupancy between 2004 and 2024, revealing patterns that are obscured by citywide averages. While some neighborhoods appear on both lists, the sets are not identical, indicating that declines in owner-occupancy are not explained solely by rising corporate ownership. This suggests that multiple mechanisms may be at play, such as changes in housing stock, redevelopment patterns, or shifts in tenure unrelated to corporate acquisition. Identifying these “high-change” neighborhoods helps narrow where ownership transitions are most pronounced and motivates examining whether these areas share common structural or demographic characteristics in 2024.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="fig4_scatter_demographics.png" alt="Corporate ownership vs owner-occupancy by neighborhood in 2024, colored by non-white population share" />
+        <figcaption>
+          This scatter plot examines the relationship between owner-occupancy and corporate ownership across Boston neighborhoods in 2024. The negative trendline indicates that neighborhoods with higher owner-occupancy rates tend to have lower levels of corporate ownership, which aligns with the broader framing in the corporate landlords and evictions subtheme that distinguishes local control from absentee ownership. Points are colored by non-white population share to provide demographic context, reflecting prior research that links housing instability and eviction exposure to racial inequities. This view is not intended to imply causality, but rather to highlight neighborhoods where low owner-occupancy, higher corporate ownership, and higher non-white population share appear to cluster, motivating more targeted follow-up analysis. Labeled neighborhoods are selected using rule-based criteria (highest corporate ownership, lowest owner-occupancy, and highest non-white share) to surface extreme cases without selectively emphasizing individual observations.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="fig5_correlation_trends.png" alt="Correlation between corporate ownership and owner-occupancy by year" />
+        <figcaption>
+          This plot tracks the Pearson correlation between corporate ownership and owner-occupancy across neighborhoods for each year, where the Pearson coefficient captures the strength and direction of the linear relationship between the two measures. The correlation is consistently negative and relatively strong over the full 2004–2024 period, indicating that neighborhoods with higher corporate ownership tend to have lower owner-occupancy in a stable and persistent way rather than as a one-year anomaly. This temporal consistency suggests that the inverse relationship observed in cross-sectional views reflects a structural pattern in neighborhood ownership composition. At the same time, correlation alone does not explain the underlying mechanisms, motivating follow-up analyses that account for neighborhood demographics, housing stock, or policy changes.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Synthesizing Findings</h2>
+
+      <h3>Q1: How have corporate ownership and owner-occupancy changed over time?</h3>
+      <p>
+        Taken together, Figures 1 and 2 show a broad and sustained shift in Boston’s neighborhood ownership
+        structure from 2004 to 2024. Distributional changes indicate that increases in corporate ownership are
+        not confined to a small subset of neighborhoods, while weighted trends demonstrate that these changes
+        persist over time and accelerate in later years. The parallel decline in owner-occupancy suggests a
+        citywide restructuring rather than short-term fluctuation, supporting claims in prior literature that
+        ownership patterns have meaningfully changed over the past two decades.
+      </p>
+
+      <h3>Q2: Which neighborhoods experienced the largest changes?</h3>
+      <p>
+        Figure 3 demonstrates that while ownership shifts are widespread, the magnitude of change varies
+        substantially across neighborhoods. Some areas experienced especially large increases in corporate
+        ownership or sharp declines in owner-occupancy, while others remained relatively stable. The fact that
+        these two sets of neighborhoods do not perfectly overlap suggests that changes in owner-occupancy are
+        not driven by a single mechanism. This finding reinforces the importance of neighborhood-level analysis
+        and cautions against relying solely on citywide averages when evaluating housing market dynamics.
+      </p>
+
+      <h3>Q3: How do ownership patterns relate to demographics?</h3>
+      <p>
+        Figures 4 and 5 together indicate a stable inverse relationship between corporate ownership and
+        owner-occupancy that persists across time and neighborhoods. When demographic context is introduced,
+        Figure 4 highlights that neighborhoods with lower owner-occupancy and higher corporate ownership often
+        also have higher non-white population shares. While this pattern does not imply causality, it aligns
+        with prior research suggesting that ownership structure and housing instability may be unevenly
+        distributed across communities. These results motivate deeper investigation into how ownership patterns,
+        demographics, and eviction-related outcomes intersect.
+      </p>
+    </section>
+
+    <section>
+      <h2>Follow-up Questions &amp; Next Steps</h2>
+      <ul>
+        <li>
+          <strong>Linking ownership structure to eviction outcomes:</strong>
+          This dataset does not include eviction filings directly. A natural next step would merge neighborhood-level ownership patterns with eviction filing data to evaluate whether areas with higher corporate ownership or lower owner-occupancy experience higher filing rates, as suggested by prior research.
+        </li>
+        <li>
+          <strong>Distinguishing long-standing patterns from recent change:</strong>
+          Some neighborhoods exhibit high corporate ownership in 2024 but relatively small changes since 2004, while others show rapid recent increases. Separating level effects from growth dynamics could help distinguish historically investor-dominated areas from neighborhoods undergoing newer transitions.
+        </li>
+        <li>
+          <strong>Disaggregating “corporate” ownership:</strong>
+          The corporate ownership measure includes a range of entity types, from large institutional investors to small LLCs. Further work could attempt to differentiate these categories to assess whether ownership concentration or scale matters for housing stability.
+        </li>
+        <li>
+          <strong>Housing stock and redevelopment effects:</strong>
+          Changes in owner-occupancy may reflect redevelopment, condo conversions, or changes in housing type rather than corporate acquisition alone. Incorporating housing age, unit type, or redevelopment indicators could clarify these mechanisms.
+        </li>
+        <li>
+          <strong>Policy and temporal breakpoints:</strong>
+          The acceleration of corporate ownership in later years raises questions about whether specific policy changes, market shocks, or post-2008 dynamics influenced ownership trends. Identifying breakpoints could contextualize these shifts.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Summary</h2>
+
+      <p>
+        From 2004 to 2024, Boston neighborhoods experienced a substantial increase in corporate ownership alongside a general decline in owner-occupancy. Distributional and temporal analyses suggest that this shift is broad-based rather than driven by a small number of extreme neighborhoods, indicating a citywide restructuring of ownership patterns. At the same time, the largest changes are concentrated in specific neighborhoods, highlighting the importance of pairing aggregate trends with neighborhood-level views to avoid obscuring localized dynamics.
+      </p>
+
+      <p>
+        Across the full time period, corporate ownership and owner-occupancy are strongly and consistently inversely related, suggesting a stable structural relationship rather than a short-term or one-off effect. This supports the use of owner-occupancy as a reasonable proxy for absentee or non-local ownership in exploratory analysis. Taken together, these findings align with prior research on housing stability and motivate deeper follow-on questions about how changes in ownership structure intersect with neighborhood demographics, housing stock characteristics, and eviction-related outcomes.
+      </p>
+    </section>
+
+    <section>
+      <h2>References</h2>
+
+      <p>
+        Badger, E. and Bui, Q. (2018) <em>In 83 million eviction records, a sweeping and intimate new look at housing in America</em>, The New York Times. Available at:
+        <a href="https://www.nytimes.com/interactive/2018/04/07/upshot/millions-of-evictions.html">https://www.nytimes.com/interactive/2018/04/07/upshot/millions-of-evictions.html</a>
+        (Accessed: 14 February 2026).
+      </p>
+
+      <p>
+        Homes for All Massachusetts (2022) <em>An Analysis of Racial Inequity in Eviction Filings across Massachusetts: Housing Justice Beyond the Emergency</em>. Available at:
+        <a href="https://www.homesforallmass.org/covid-evictions-report/hfamass-covid-evictions-report-short-03-22-screen-rfs.pdf">https://www.homesforallmass.org/covid-evictions-report/hfamass-covid-evictions-report-short-03-22-screen-rfs.pdf</a>
+        (Accessed: 14 February 2026).
+      </p>
+    </section>
+
+
+<section>
+  <h2>Generative AI Use Statement</h2>
+
+  <p>
+    Generative AI (ChatGPT) was used as a support tool during this assignment to improve the quality,
+    readability, and efficiency of the HTML code. All analytical decisions, interpretations,
+    and final written content were reviewed and edited by the author, and the author is responsible
+    for the correctness of the results and any remaining errors.
+  </p>
+
+  <p>
+    Link to the AI chat used for this assignment:
+    <a href="https://chatgpt.com/share/6994b39b-670c-8005-a988-6518dc4a252d">
+      https://chatgpt.com/share/6994b39b-670c-8005-a988-6518dc4a252d
+    </a>
+  </p>
+</section>
+
+</main>
 </body>
 </html>
