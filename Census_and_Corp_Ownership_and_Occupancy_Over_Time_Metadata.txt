@@ -1,0 +1,188 @@
+Title: Change Over Time in Corporate Ownership and Owner Occupancy Rates in Boston Neighborhoods with Census
+Table: boston_property_rates
+Type: csv
+
+Data Source:
+Property Assessment Data for the City of Boston from 2004 - 2024:
+    Source: City of Boston
+    Link: https://data.boston.gov/dataset/property-assessment
+
+Boston Neighborhood Boundaries Approximated by 2020 Census Block Groups:
+    Source: City of Boston
+    Link: https://data.boston.gov/dataset/boston-neighborhood-boundaries-approximated-by-2020-census-block-groups1
+
+Block Group Census for Boston:
+    Source: US Census Bureau
+    Link: https://data.boston.gov/dataset/2020-census-for-boston
+
+Description:
+This dataset encapsulates the evolution of corporate ownership and owner occupancy rates within various
+neighborhoods of Boston from 2004 to 2024. The data is derived from property assessment records of
+the City of Boston. Corporate ownership is determined using keyphrase matching on the 'owner name' field,
+identifying corporations with markers such as “LLC”, “LLP”, “LP”, “Corp”, “Realty”, "Trust", "Bank", etc.
+It's important to note that this method introduces a degree of fuzziness, as not all corporate-owned properties
+may be captured and non-corporate entities may occasionally be misclassified. The owner occupancy rate (own_occ_rate)
+is calculated as the proportion of 'OWN_OCC=Y' to the total of 'OWN_OCC=Y' and 'OWN_OCC=N' within each neighborhood,
+excluding blanks. Similarly, the corporate ownership rate (corp_own_rate) is the proportion of 'CORP_OWN=Y' to the
+total of 'CORP_OWN=Y' and 'CORP_OWN=N'.
+
+This data also contains the relevant US Census data fields for each neighborhood and year.
+
+Attributes:
+    neighborhood:
+        type: String
+        description: The name of the Boston neighborhood.
+    year:
+        type: Integer
+        description: The year in which the data was recorded, ranging from 2004 to 2024.
+    own_occ_rate:
+        type: Double
+        description: The rate of owner-occupied properties, calculated as the number of 'OWN_OCC=Y' entries divided by the sum of 'OWN_OCC=Y' and 'OWN_OCC=N' entries for that neighborhood in the given year. This is expressed as a decimal value between 0 and 1, rounded to two decimal places.
+    corp_own_rate:
+        type: Double
+        description: The rate of corporate-owned properties, calculated as the number of 'corp_own=Y' entries divided by the sum of 'corp_own=Y' and 'corp_own=N' entries for that neighborhood in the given year. This is expressed as a decimal value between 0 and 1, rounded to two decimal places.
+
+Attributes extracted from the US Census Data Fields:
+    college:
+        type: Integer
+        description: The number of individuals residing in college or university student housing.
+
+    tot_pop_18plus:
+        type: Integer
+        description: Total population aged 18 years and over.
+
+    two_or_more_0_17:
+        type: Integer
+        description: Number of individuals aged 0-17 years who identify with two or more races.
+
+    aapi_0_17:
+        type: Integer
+        description: Number of Asian American and Pacific Islander (AAPI) individuals aged 0-17 years.
+
+    tot_pop_all:
+        type: Integer
+        description: Total population of all ages.
+
+    other_18plus:
+        type: Integer
+        description: Number of individuals aged 18 and over identifying as "Other" race.
+
+    nursing:
+        type: Integer
+        description: Population residing in nursing facilities.
+
+    other_inst:
+        type: Integer
+        description: Population in other institutional facilities (e.g., psychiatric hospitals, juvenile detention).
+
+    black_all:
+        type: Integer
+        description: Total population identifying as Black or African American.
+
+    hisp_0_17:
+        type: Integer
+        description: Number of Hispanic or Latino individuals aged 0-17 years.
+
+    tot_unit:
+        type: Integer
+        description: Total number of housing units.
+
+    aapi_all:
+        type: Integer
+        description: Total population identifying as Asian American and Pacific Islander.
+
+    military:
+        type: Integer
+        description: Population residing in military quarters.
+
+    white_18plus:
+        type: Integer
+        description: Number of White individuals aged 18 years and over.
+
+    two_or_more_all:
+        type: Integer
+        description: Total population identifying with two or more races.
+
+    correctional:
+        type: Integer
+        description: Population in correctional facilities for adults.
+
+    other_0_17:
+        type: Integer
+        description: Number of individuals aged 0-17 years identifying as "Other" race.
+
+    white_0_17:
+        type: Integer
+        description: Number of White individuals aged 0-17 years.
+
+    hisp_18plus:
+        type: Integer
+        description: Number of Hispanic or Latino individuals aged 18 years and over.
+
+    aian_18plus:
+        type: Integer
+        description: Number of American Indian and Alaska Native (AIAN) individuals aged 18 years and over.
+
+    two_or_more_18plus:
+        type: Integer
+        description: Number of individuals aged 18 years and over who identify with two or more races.
+
+    black_0_17:
+        type: Integer
+        description: Number of Black or African American individuals aged 0-17 years.
+
+    vacant_unit:
+        type: Integer
+        description: Number of vacant housing units.
+
+    white_all:
+        type: Integer
+        description: Total population identifying as White.
+
+    aian_0_17:
+        type: Integer
+        description: Number of American Indian and Alaska Native individuals aged 0-17 years.
+
+    other_noninst:
+        type: Integer
+        description: Population in non-institutionalized, "Other" types of group quarters (e.g., homeless shelters, group homes).
+
+    tot_pop_0_17:
+        type: Integer
+        description: Total population aged 0-17 years.
+
+    aian_all:
+        type: Integer
+        description: Total population identifying as American Indian and Alaska Native.
+
+    tot_gq_pop:
+        type: Integer
+        description: Total population living in group quarters.
+
+    occ_unit:
+        type: Integer
+        description: Number of occupied housing units.
+
+    aapi_18plus:
+        type: Integer
+        description: Number of Asian American and Pacific Islander individuals aged 18 years and over.
+
+    juvenile:
+        type: Integer
+        description: Population in juvenile facilities.
+
+    Neighborhood:
+        type: Integer
+        description: Field for neighborhood identification (categorical or descriptive).
+
+    other_all:
+        type: Integer
+        description: Total population identifying as "Other" race.
+
+    hisp_all:
+        type: Integer
+        description: Total population identifying as Hispanic or Latino.
+
+    black_18plus:
+        type: Integer
+        description: Number of Black or African American individuals aged 18 years and over.
