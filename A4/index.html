@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Vis & Society Assignment 4</title>
+	<link rel="stylesheet" href="https://vis-society.github.io/assignments/report.css" />
+</head>
+
+<body>
+	<header>
+		<h1>
+			<small>Assignment 4</small>
+			Persuasive or Deceptive Visualization?
+		</h1>
+
+		<p>
+			<strong>Christopher Zareck</strong> — <em>czareck2@mit.edu</em>
+		</p>
+	</header>
+
+	<main>
+    <h2>Proposition: A relatively small group of officers accounts for a disproportionate share of civilian misconduct allegations.</h2>
+
+		<section>
+      <h3>FOR the Proposition: A small subset of officers accounts for a very large share of allegations.</h3>
+
+      <figure>
+				<img src="fig_for_concentration.png" alt="Cumulative distribution of CCRB allegations across NYPD officers" />
+				<figcaption>
+					Cumulative concentration chart showing that allegations are not evenly distributed across officers, with the actual distribution bending well above the equality line.
+				</figcaption>
+			</figure>
+
+			<p>
+				Design Decisions and Rationale:
+			</p>
+
+			<ul>
+				<li>
+					<strong>Decision 1: I used allegation rows per officer rather than unique complaints per officer. Score: -0.5.</strong>
+					This makes the concentration pattern look stronger because a single complaint can produce multiple allegation records. I chose it because it supports the proposition more clearly, but it is only mildly deceptive since allegations are still part of the released dataset and are relevant to misconduct patterns.
+				</li>
+
+				<li>
+					<strong>Decision 2: I used a cumulative concentration curve with a “Perfect Equality” reference line. Score: +1.5.</strong>
+					This is a perceptually effective way to show how unevenly allegations are distributed. The comparison line makes the pattern immediately legible and helps the reader see that the observed distribution differs meaningfully from an equal distribution across officers.
+				</li>
+
+				<li>
+					<strong>Decision 3: I used a strongly slanted title that foregrounds the takeaway before the reader examines the chart. Score: -1.0.</strong>
+					The title tells the reader what conclusion to look for, which makes the visualization more persuasive. I considered using a more neutral title, but that would have weakened the rhetorical framing and made the chart feel more exploratory than argumentative.
+				</li>
+			</ul>
+    </section>
+
+    <section>
+      <h3>AGAINST the Proposition: Allegations are more broadly distributed than the concentration framing suggests.</h3>
+
+      <figure>
+				<img src="fig_against_distribution.png" alt="Distribution of NYPD officers by unique complaint count" />
+				<figcaption>
+          Binned bar chart showing that complaint histories are spread across many officers, with most officers falling into low-to-moderate complaint-count categories.
+				</figcaption>
+			</figure>
+
+			<p>
+				Design Decisions and Rationale:
+			</p>
+
+			<ul>
+				<li>
+					<strong>Decision 1: I switched from allegation rows to unique complaints per officer. Score: +1.0.</strong>
+					This is a more conservative unit of analysis because it avoids counting multiple allegations from the same complaint separately. I used it because it softens the concentration pattern and supports the counterargument that complaint histories are distributed across many officers, but it is still fairly earnest since unique complaints are also a reasonable measure.
+				</li>
+
+				<li>
+					<strong>Decision 2: I grouped complaint counts into broad bins (1, 2–3, 4–5, 6–10, 11+). Score: -0.5.</strong>
+					Binning reduces attention to the long tail and makes the distribution feel more stable and less extreme. I chose these bins because they are easy to read and make the majority categories stand out, though the grouping does compress meaningful variation among officers with the highest counts.
+				</li>
+
+				<li>
+					<strong>Decision 3: I did not specifically annotate or visually isolate the highest-count outliers. Score: -1.0.</strong>
+					Leaving the 11+ category as just one bar among five helps avoid drawing too much attention to the extreme tail. This supports the counterargument effectively, but it is also a clear example of how omission can be persuasive without looking obviously deceptive at first glance.
+				</li>
+			</ul>
+    </section>
+
+    <section>
+      <h2>Final Reflection</h2>
+
+      <p>
+        Working on these two visualizations made it clear how much control the designer has over the story the data tells. The underlying dataset never changed, but by switching the framing, aggregation, and chart type, I could make two very different arguments that both felt reasonable. The concentration curve made it immediately obvious that a relatively small share of officers accounted for a large share of allegations, especially when compared to the equality line. On the other hand, the distribution chart emphasized that most officers had only a few complaints, which made the system appear more broadly distributed rather than concentrated among a small group. Neither visualization was false, but each highlighted different aspects of the same reality.
+        </p>
+
+			<p>
+        What surprised me most was how subtle many of these decisions were. Choices like binning ranges, selecting the unit of analysis, or emphasizing certain reference points did not feel deceptive while I was making them, but they clearly shaped the takeaway. It made me realize that most misleading visualizations are not the result of obvious manipulation, but rather a series of reasonable decisions that collectively push the viewer toward a specific interpretation. I think ethical visualization is less about avoiding persuasion entirely and more about being aware of how your choices influence interpretation. This assignment made that influence very tangible, because I could see how easily the narrative shifted even when working with the exact same data.
+     </p>
+    </section>
+	</main>
+    <section>
+  <h2>AI Assistance Disclosure</h2>
+
+  <p>
+    This assignment was created with assistance from GitHub Copilot (Claude Sonnet 4.5) and ChatGPT.
+    AI tools were used primarily to support coding, debugging, and refinement of the visualizations.
+  </p>
+  <p>
+    All analytical decisions, visualization framing, and final interpretations were made by the author.
+    The author reviewed and modified all generated code and text before submission.
+  </p>
+
+  <p>
+    GitHub Copilot does not provide a persistent public link to individual chat sessions.
+  </p>
+</section>
+</body>
+</html>
